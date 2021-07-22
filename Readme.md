@@ -12,7 +12,7 @@ Todo:
 
 # Contact developer
 Ernest
-asieduernest@hotmail.com
+
 
 Resources
 [loding animation](https://loading.io/css/)
