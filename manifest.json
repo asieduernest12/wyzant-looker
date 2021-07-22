@@ -10,9 +10,6 @@
     "128": "icons/icon128.png"
   },
   "default_locale": "en",
-  // "background": {
-  //   "service_worker": "/src/bg/background.js"
-  // },
   "permissions": [
     "contextMenus",
     "tabs"
