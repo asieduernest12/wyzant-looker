@@ -2,108 +2,123 @@
  * Place your custom CSS styles here.
  **/
 
- .wzl_indicator {
-     position: fixed;
-     top: 20px;
-     right: 20px;
-     color:#fff;
-     cursor: pointer;
- }
+.wzl_indicator {
+	position: fixed;
+	top: 16px;
+	right: 20px;
+	color: #fff;
+	cursor: pointer;
 
- .wzl_iframe {
-     position:fixed;
-     width:50vw;
-     height: 70vh;
-     top: 0;
-     right:0;
-     display: none;
- }
+	border: 1px solid;
 
- .wzl-spinner-container{
-     display: none;
-     background-color: hsl(270, 50%, 40%);
- }
+	background-image: linear-gradient(to right, #cd7c1b 20%, #363232 20%);
+	width: 100px;
+	text-align: center;
+	padding: 8px;
+	border-radius: 15px;
+	box-sizing: content-box;
+}
 
- .wzl-spinner-container.show {
-     display: grid;
-     place-items: center;
- }
+.wzl_indicator_active {
+	background: #cd7c1b;
+}
 
- .wzl-card,.wzl-spinner-container {
-     position:fixed;
-     height:500px;
-     width: 20vw;
-     right:20px;
-     top:100px;
-     border: 1px solid #d3d2d2;
-     padding-left: 16px;
-     padding-right: 16px;
-     
- }
+.wzl-listener-active .username {
+	text-decoration: underline;
+}
+.wzl_iframe {
+	position: fixed;
+	width: 50vw;
+	height: 70vh;
+	top: 0;
+	right: 0;
+	display: none;
+}
 
- .wzl-card--close {
-     position: absolute;
-     top: 10px;
-     right: 10px;
-     font-weight: 600;
-     cursor: pointer;
-     font-size: 24px;
- }
+.wzl-spinner-container {
+	display: none;
+	background-color: hsl(270, 50%, 40%);
+}
 
- /* loading spinner */
- .lds-ellipsis {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-  }
-  .lds-ellipsis div {
-    position: absolute;
-    top: 33px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #fff;
-    animation-timing-function: cubic-bezier(0, 1, 1, 0);
-  }
-  .lds-ellipsis div:nth-child(1) {
-    left: 8px;
-    animation: lds-ellipsis1 0.6s infinite;
-  }
-  .lds-ellipsis div:nth-child(2) {
-    left: 8px;
-    animation: lds-ellipsis2 0.6s infinite;
-  }
-  .lds-ellipsis div:nth-child(3) {
-    left: 32px;
-    animation: lds-ellipsis2 0.6s infinite;
-  }
-  .lds-ellipsis div:nth-child(4) {
-    left: 56px;
-    animation: lds-ellipsis3 0.6s infinite;
-  }
-  @keyframes lds-ellipsis1 {
-    0% {
-      transform: scale(0);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  @keyframes lds-ellipsis3 {
-    0% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(0);
-    }
-  }
-  @keyframes lds-ellipsis2 {
-    0% {
-      transform: translate(0, 0);
-    }
-    100% {
-      transform: translate(24px, 0);
-    }
-  }
-  
+.wzl-spinner-container.show {
+	display: grid;
+	place-items: center;
+}
+
+.wzl-card,
+.wzl-spinner-container {
+	position: fixed;
+	height: 500px;
+	width: 20vw;
+	right: 20px;
+	top: 100px;
+	border: 1px solid #d3d2d2;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.wzl-card--close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-weight: 600;
+	cursor: pointer;
+	font-size: 24px;
+}
+
+/* loading spinner */
+.lds-ellipsis {
+	display: inline-block;
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+.lds-ellipsis div {
+	position: absolute;
+	top: 33px;
+	width: 13px;
+	height: 13px;
+	border-radius: 50%;
+	background: #fff;
+	animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+	left: 8px;
+	animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+	left: 8px;
+	animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+	left: 32px;
+	animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+	left: 56px;
+	animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@keyframes lds-ellipsis3 {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+@keyframes lds-ellipsis2 {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(24px, 0);
+	}
+}
