@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "manifest_version": 3,
   "description": "Lookup the profile of a student from the messaging page",
-  "homepage_url": "http://google.com",
+  "homepage_url": "https://github.com/asieduernest12/wyzant-looker",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
