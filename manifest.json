@@ -11,7 +11,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*"],
+			"matches": ["https://www.wyzant.com/tutor/messaging/*"],
 			"css": ["src/inject/inject.css"]
 		},
 		{
