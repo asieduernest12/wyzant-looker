@@ -12,11 +12,11 @@
 	"permissions": ["contextMenus", "tabs"],
 	"content_scripts": [
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*"],
+			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*"],
 			"css": ["src/inject/inject.css"]
 		},
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*"],
+			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*"],
 			"js": ["src/inject/inject.js"]
 		}
 	]

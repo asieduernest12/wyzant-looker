@@ -1,14 +1,44 @@
-console.log("script injected");
-insertWZLPlaceholder();
-showWzlIndicator();
+function init() {
+	console.log("wzl script injected")
+	let page_url = window.location.href.trim()
 
+	const LOCATION_TRIGGER_TOKENS = { job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs\/\d+/, message_page: /https:\/\/www.wyzant.com\/tutor\/messaging/ }
+
+	let [page] = Object.entries(LOCATION_TRIGGER_TOKENS).filter(([key, value]) => page_url.match(value)).map(([key]) => key)
+
+	console.log('wlz page target', page)
+
+	switch (page) {
+		case 'message_page':
+			console.log("wzl message_page");
+			insertWZLPlaceholder();
+			showWzlIndicator();
+
+			break;
+		case 'job_application_submit_page': {
+			//change hourly-rate input to number
+			console.log("wzl job_application_submit_page");
+			setupJobApplicationPage()
+			break
+		}
+
+		default:
+			break;
+	}
+}
+
+function setupJobApplicationPage() {
+	let hourly_rate_input = document.querySelector('input[name=hourly_rate]')
+	hourly_rate_input.setAttribute('type', 'number')
+	hourly_rate_input.setAttribute('step', '5')
+}
 
 function isConvoPage(_url) {
 	return ["", _url].join("").includes("conversation");
 }
 
 //check for document readystate
-document.querySelector("#messaging-app").addEventListener("click", messageDocumentClickHandler);
+// document.querySelector("#messaging-app").addEventListener("click", messageDocumentClickHandler);
 
 async function messageDocumentClickHandler(event) {
 	let previous_card = document.querySelector(".wzl-profile");
@@ -172,3 +202,5 @@ function showSpinner() {
 function hideSpinner() {
 	document.querySelector(".wzl-spinner-container").classList.remove("show");
 }
+
+init()
