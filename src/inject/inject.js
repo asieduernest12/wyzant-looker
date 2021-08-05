@@ -60,22 +60,34 @@ async function messageDocumentClickHandler(event) {
 
 	let [student_first_name] = selected_student.textContent.trim().split(" ");
 
-	let iframe = addIFrame();
-	document.querySelector(".wzl-container").appendChild(iframe);
+	let { iframe, is_new } = addIFrame();
 	console.log({ selected_student });
+	if (is_new) {
+		document.querySelector(".wzl-container").appendChild(iframe);
+		await new Promise((res, rej) => {
+			setTimeout(() => {
+				res('done waiting')
+			}, 9000);
+		})
 
-	setTimeout(() => {
-		hideSpinner();
-		let job_result = findStudentResult(iframe, student_first_name);
-		let student_info = makeStudentAdapter(job_result);
-		console.log({ job_result });
-		iframe.remove();
+	}
+	hideSpinner();
+	let job_result = findStudentResult(iframe, student_first_name);
+	let student_info = makeStudentAdapter(job_result);
+	console.log({ job_result });
+	// iframe.remove();
 
-		let wzl_profile = document.createElement("div");
-		wzl_profile.classList.add("wzl-profile");
-		wzl_profile.innerHTML = makeWzlStudentCard(student_info);
-		document.querySelector(".wzl-container").appendChild(wzl_profile);
-	}, 9000);
+	let wzl_profile = document.createElement("div");
+	wzl_profile.classList.add("wzl-profile");
+	wzl_profile.innerHTML = makeWzlStudentCard(student_info);
+	document.querySelector(".wzl-container").appendChild(wzl_profile);
+
+	//add close and reset listeners
+	document.querySelector('.wzl-card--close').addEventListener('click', () => closeWzlCard(false))
+	document.querySelector('.wzl-card--reset').addEventListener('click', () => closeWzlCard(true))
+
+
+
 }
 
 function getConversationSummary(element) {
@@ -95,7 +107,8 @@ function insertWZLPlaceholder() {
 function makeWzlStudentCard(student_info) {
 	return `
 	<div class="wzl-card">
-		<span class="wzl-card--close" onClick="document.querySelector('.wzl-card').remove()">X</span>
+		<span class="wzl-card--close">X</span>
+		<span class="wzl-card--reset">Close & Reset</span>
 		<div class="wzl-card--avatar"></div>
 		<div class="wzl-card--body wzl-student">
 			<p class="wzl-student--username">${student_info.title}</p>
@@ -104,6 +117,29 @@ function makeWzlStudentCard(student_info) {
 		</div>
 	</div>
 	`;
+}
+
+
+function closeWzlCard(reset) {
+	//remove
+	document.querySelector('.wzl-card').remove();
+
+	if (reset ?? false) {
+		let { iframe } = addIFrame();
+		iframe.remove();
+
+		//remove wzl from messages\
+		Array.from(document.querySelectorAll(".conversation-summary-wrap")).
+			filter((convo) => convo.classList.contains("wzl-listener-active")).
+			forEach((convo) => {
+				convo.classList.remove("wzl-listener-active");
+				convo.removeEventListener("click", messageDocumentClickHandler);
+			});
+
+		document.querySelector(".show-more a.btn").removeEventListener("click", showMoreConvoBtnClick);
+
+		deActivateWzlIndicator()
+	}
 }
 
 function makeSpinner() {
@@ -117,7 +153,7 @@ function makeSpinner() {
 function addIFrame() {
 	//remove existing iframe element
 	let previous_iframe = document.querySelector("#wzl_iframe");
-	if (!!previous_iframe) previous_iframe.remove();
+	if (!!previous_iframe) return { iframe: previous_iframe, is_new: false };
 
 	let wzl_iframe = document.createElement("iframe");
 	wzl_iframe.setAttribute("src", "https://www.wyzant.com/tutor/jobapplication/history?sort=1&pagenumber=0&pagesize=100");
@@ -125,7 +161,7 @@ function addIFrame() {
 	wzl_iframe.setAttribute("height", "200");
 	wzl_iframe.classList.add("wzl_iframe");
 	wzl_iframe.setAttribute("id", "wzl_iframe");
-	return wzl_iframe;
+	return { iframe: wzl_iframe, is_new: true };
 }
 
 function showWzlIndicator() {
