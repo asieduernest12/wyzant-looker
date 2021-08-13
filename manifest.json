@@ -2,7 +2,7 @@
 	"name": "Wyzant-looker",
 	"version": "0.0.2",
 	"manifest_version": 3,
-	"description": "Adds popup to see students job post on tutor messaging page and add increase and decrease buttons to price rate in job application details page",
+	"description": "See job post details from tutor messaging page and add increase and decrease buttons to price rate in job application details page",
 	"homepage_url": "https://github.com/asieduernest12/wyzant-looker",
 	"icons": {
 		"19": "icons/icon19.png",
