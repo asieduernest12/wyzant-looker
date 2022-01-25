@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "jar -cfM dist/wyzant-looker.zip src icons manifest.json Readme.md",
-		"changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > changelog.md"
+		"changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > dist/changelog.md"
   },
   "repository": {
     "type": "git",
