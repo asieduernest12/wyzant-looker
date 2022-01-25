@@ -41,8 +41,8 @@ function setupJobApplicationPage() {
 	focusSubmitButton()
 }
 
-function focusSubmitButton(){
-	document.querySelector('input[type=submit]').focus()
+function focusSubmitButton() {
+	document.querySelector("input[type=submit]").focus()
 }
 
 function adjustPriceUpOnJobApplicationPage(hour_rate_label_node, hourly_rate_input_node) {
@@ -57,7 +57,8 @@ function adjustPriceUpOnJobApplicationPage(hour_rate_label_node, hourly_rate_inp
 			hourly_rate_input_node.value = Number(hour_rate_label_value)
 		} else {
 			console.log("charging base plus difference")
-			hourly_rate_input_node.value = 70 + 0.6 * (Number(hour_rate_label_value) - 70)
+			let difference = 0.6 * (Number(hour_rate_label_value) - 70)
+			hourly_rate_input_node.value = Math.ceil((70 + difference) / 5) * 5
 		}
 	}
 }
@@ -106,15 +107,16 @@ async function messageDocumentClickHandler(event) {
 	if (is_new) {
 		document.querySelector(".wzl-container").appendChild(iframe)
 
-		await (async function () {
+		await new Promise((res) => {
 			let _interval = setInterval(() => {
 				//resolve if job-results are found
 				console.log("interval running")
 				if (Array.from(document.querySelector(".wzl_iframe").contentWindow.document.querySelectorAll(".job-result")).length) {
-					return clearInterval(_interval)
+					clearInterval(_interval)
+					res("ready")
 				}
 			}, 400)
-		})()
+		})
 	}
 
 	hideSpinner()
