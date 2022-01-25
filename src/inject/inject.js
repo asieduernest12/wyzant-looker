@@ -80,8 +80,6 @@ function isConvoPage(_url) {
 // document.querySelector("#messaging-app").addEventListener("click", messageDocumentClickHandler);
 
 async function messageDocumentClickHandler(event) {
-	let mutation_config = { attributes: true, childList: true, subtree: true }
-
 	let previous_card = document.querySelector(".wzl-profile")
 	if (!!previous_card) previous_card.remove()
 
@@ -106,13 +104,13 @@ async function messageDocumentClickHandler(event) {
 	console.log({ selected_student })
 	if (is_new) {
 		document.querySelector(".wzl-container").appendChild(iframe)
-
 		await new Promise((res) => {
 			let _interval = setInterval(() => {
 				//resolve if job-results are found
 				console.log("interval running")
 				if (Array.from(document.querySelector(".wzl_iframe").contentWindow.document.querySelectorAll(".job-result")).length) {
 					clearInterval(_interval)
+
 					res("ready")
 				}
 			}, 400)
@@ -121,10 +119,15 @@ async function messageDocumentClickHandler(event) {
 
 	hideSpinner()
 
-	let wzl_profile = document.createElement("div")
+	let wzl_profile = document.querySelector(".wzl-profile")
+
+	if (!wzl_profile) {
+		wzl_profile = document.createElement("div")
+		document.querySelector(".wzl-container").appendChild(wzl_profile)
+	}
+
 	wzl_profile.classList.add("wzl-profile")
 	wzl_profile.innerHTML = makeWzlStudentCard(makeStudentAdapter(findStudentResult(iframe, student_first_name)))
-	document.querySelector(".wzl-container").appendChild(wzl_profile)
 
 	//add close and reset listeners
 	document.querySelector(".wzl-card--close").addEventListener("click", () => closeWzlCard(false))
