@@ -1,3 +1,5 @@
+// @ts-check
+
 function init() {
 	console.log("wzl script injected")
 	let page_url = window.location.href.trim()
@@ -31,6 +33,9 @@ function init() {
 
 function setupJobApplicationPage() {
 	let hourly_rate_input = document.querySelector("input[name=hourly_rate]")
+
+	if (!hourly_rate_input) throw alert('hourly_rate_input is null')
+	
 	hourly_rate_input.setAttribute("type", "number")
 	hourly_rate_input.setAttribute("step", "5")
 
@@ -42,7 +47,11 @@ function setupJobApplicationPage() {
 }
 
 function focusSubmitButton() {
-	document.querySelector("input[type=submit]").focus()
+	let /**@type HTMLElement */button = document.querySelector("input[type=submit]")
+
+	if (!button) throw alert("input[type=submit] not found")
+
+	button.focus()
 }
 
 function adjustPriceUpOnJobApplicationPage(hour_rate_label_node, hourly_rate_input_node) {
