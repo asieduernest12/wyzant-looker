@@ -1,10 +1,17 @@
 // @ts-check
+import RateFinder from "./rate_finder"
+
+/**@typedef {{title,time,description,rate:Number}} StudentInfo */
 
 function init() {
 	console.log("wzl script injected")
 	let page_url = window.location.href.trim()
 
-	const LOCATION_TRIGGER_TOKENS = { job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs\/\d+/, message_page: /https:\/\/www.wyzant.com\/tutor\/messaging/ }
+	const LOCATION_TRIGGER_TOKENS = {
+		job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs\/\d+/,
+		message_page: /https:\/\/www.wyzant.com\/tutor\/messaging/,
+		// students_info_page: /https:\/\/www.wyzant.com\/tutor\/students\/index/,
+	}
 
 	let [page] = Object.entries(LOCATION_TRIGGER_TOKENS)
 		.filter(([key, value]) => page_url.match(value))
@@ -13,6 +20,7 @@ function init() {
 	console.log("wlz page target", page)
 
 	switch (page) {
+		case "students_info_page":
 		case "message_page":
 			console.log("wzl message_page")
 			insertWZLPlaceholder()
@@ -34,8 +42,8 @@ function init() {
 function setupJobApplicationPage() {
 	let hourly_rate_input = document.querySelector("input[name=hourly_rate]")
 
-	if (!hourly_rate_input) throw alert('hourly_rate_input is null')
-	
+	if (!hourly_rate_input) throw alert("hourly_rate_input is null")
+
 	hourly_rate_input.setAttribute("type", "number")
 	hourly_rate_input.setAttribute("step", "5")
 
@@ -47,7 +55,7 @@ function setupJobApplicationPage() {
 }
 
 function focusSubmitButton() {
-	let /**@type HTMLElement */button = document.querySelector("input[type=submit]")
+	let /**@type HTMLElement */ button = document.querySelector("input[type=submit]")
 
 	if (!button) throw alert("input[type=submit] not found")
 
@@ -128,6 +136,13 @@ async function messageDocumentClickHandler(event) {
 
 	hideSpinner()
 
+	let student_rate_info
+	try {
+		student_rate_info = await RateFinder().getStudent(selected_student.textContent.trim())
+	} catch (error) {
+		student_rate_info = { name: "", rate_online: "NA", rate_inperson: "NA" }
+	}
+
 	let wzl_profile = document.querySelector(".wzl-profile")
 
 	if (!wzl_profile) {
@@ -136,7 +151,7 @@ async function messageDocumentClickHandler(event) {
 	}
 
 	wzl_profile.classList.add("wzl-profile")
-	wzl_profile.innerHTML = makeWzlStudentCard(makeStudentAdapter(findStudentResult(iframe, student_first_name)))
+	wzl_profile.innerHTML = makeWzlStudentCard(makeStudentAdapter(findStudentResult(iframe, student_first_name), student_rate_info))
 
 	//add close and reset listeners
 	document.querySelector(".wzl-card--close").addEventListener("click", () => closeWzlCard(false))
@@ -271,20 +286,27 @@ function findStudentResult(iframe, student_first_name) {
 	return first_found
 }
 
-function makeStudentAdapter(job_result) {
-	if (!job_result) {
-		return {
-			title: "Info not found",
-			time: "Info not found",
-			description: "Info not found in recent 100 submitted job applications",
+/**@return StudentInfo */
+function makeStudentAdapter(job_result, student_rate_info) {
+	let result = {
+		title: "Info not found",
+		time: "Info not found",
+		description: "Info not found in recent 100 submitted job applications",
+		rate: -1,
+	}
+
+	if (job_result) {
+		result = {
+			title: job_result.querySelector(".job-result h4").textContent,
+			time: `${job_result.querySelectorAll(".job-result p")[2].textContent}`,
+			description: job_result.querySelectorAll(".job-result p")[0].textContent,
+			rate: 0,
 		}
 	}
 
-	return {
-		title: job_result.querySelector(".job-result h4").textContent,
-		time: job_result.querySelectorAll(".job-result p")[2].textContent,
-		description: job_result.querySelectorAll(".job-result p")[0].textContent,
-	}
+	result.time += ` online: ${student_rate_info.rate_online}, inperson: ${student_rate_info.rate_inperson}`
+
+	return result
 
 	//h4 p1,p3
 }

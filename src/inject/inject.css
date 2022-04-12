@@ -26,7 +26,7 @@
 .wzl-listener-active .username {
   text-decoration: underline;
 }
-.wzl_iframe {
+.wzl_iframe,#wzl_rates_iframe {
   position: fixed;
   width: 50vw;
   height: 70vh;
