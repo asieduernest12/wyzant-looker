@@ -6,6 +6,10 @@ help with and the description the students provided
 # Installation
 Todo:
 
+
+# How to build and deploy for devs
+1. building run: ```npm run build```
+
 # How to use it
 Todo:
 
