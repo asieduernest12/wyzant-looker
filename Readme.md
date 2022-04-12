@@ -8,7 +8,8 @@ Todo:
 
 
 # How to build and deploy for devs
-1. building run: ```npm run build```
+1. dev run: ```npm run dev```
+2. building for run: ```npm run prod```
 
 # How to use it
 Todo:
