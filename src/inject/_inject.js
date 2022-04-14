@@ -1,5 +1,6 @@
 // @ts-check
 import RateFinder from "./rate_finder"
+import { setupJobApplicationPage } from "./setupJobApplicationPage"
 
 /**@typedef {{title,time,description,rate:Number}} StudentInfo */
 
@@ -39,66 +40,34 @@ function init() {
 	}
 }
 
-function setupJobApplicationPage() {
-	let hourly_rate_input = document.querySelector("input[name=hourly_rate]")
-
-	if (!hourly_rate_input) throw alert("hourly_rate_input is null")
-
-	hourly_rate_input.setAttribute("type", "number")
-	hourly_rate_input.setAttribute("step", "5")
-
-	adjustPriceUpOnJobApplicationPage(document.querySelector(".hourly-rate-label + p"), hourly_rate_input)
-
-	selectDefaultApplicationMessageResponse()
-
-	focusSubmitButton()
-}
-
-function focusSubmitButton() {
-	let /**@type HTMLElement */ button = document.querySelector("input[type=submit]")
-
-	if (!button) throw alert("input[type=submit] not found")
-
-	button.focus()
-}
-
-function adjustPriceUpOnJobApplicationPage(hour_rate_label_node, hourly_rate_input_node) {
-	if (!hourly_rate_input_node || !hour_rate_label_node) return
-
-	let [hour_rate_label_value] = hour_rate_label_node.textContent.match(/\d*$/)
-
-	if (Number(hour_rate_label_value) > hourly_rate_input_node.value) {
-		console.log("high offer present")
-		if (Number(hour_rate_label_value) <= 70) {
-			console.log("charge exact offer")
-			hourly_rate_input_node.value = Number(hour_rate_label_value)
-		} else {
-			console.log("charging base plus difference")
-			let difference = 0.6 * (Number(hour_rate_label_value) - 70)
-			hourly_rate_input_node.value = Math.ceil((70 + difference) / 5) * 5
-		}
-	}
-}
-
-function selectDefaultApplicationMessageResponse() {
-	let default_response_option = Array.from(document.querySelectorAll("select[name=template_select] > option").values()).find(({ textContent }) => textContent === "default application")
-
-	if (!default_response_option) return
-
-	document.querySelector("select[name=template_select]").value = default_response_option.value
-
-	document.querySelector("textarea#personal_message").value = default_response_option.value
-}
 function isConvoPage(_url) {
 	return ["", _url].join("").includes("conversation")
 }
 
+const RenderJobPostDetails = (student_result_info) => {
+	let wzl_profile = document.querySelector(".wzl-profile")
+
+	if (!wzl_profile) {
+		wzl_profile = document.createElement("div")
+		document.querySelector(".wzl-container").appendChild(wzl_profile)
+	}
+
+	wzl_profile.classList.add("wzl-profile")
+	wzl_profile.innerHTML = makeWzlStudentCard(makeStudentAdapter(student_result_info))
+
+	//add close and reset listeners
+	document.querySelector(".wzl-card--close").addEventListener("click", () => closeWzlCard(false))
+	document.querySelector(".wzl-card--reset").addEventListener("click", () => closeWzlCard(true))
+	console.log("%c job post details ready", "background:lightyellow")
+	return
+}
 //check for document readystate
 // document.querySelector("#messaging-app").addEventListener("click", messageDocumentClickHandler);
 
-async function messageDocumentClickHandler(event) {
+function messageDocumentClickHandler(event) {
 	let previous_card = document.querySelector(".wzl-profile")
-	if (!!previous_card) previous_card.remove()
+
+	if (previous_card) previous_card.remove()
 
 	showSpinner()
 
@@ -119,43 +88,53 @@ async function messageDocumentClickHandler(event) {
 	let { iframe, is_new } = addIFrame()
 
 	console.log({ selected_student })
-	if (is_new) {
-		document.querySelector(".wzl-container").appendChild(iframe)
-		await new Promise((res) => {
-			let _interval = setInterval(() => {
-				//resolve if job-results are found
-				console.log("interval running")
-				if (Array.from(document.querySelector(".wzl_iframe").contentWindow.document.querySelectorAll(".job-result")).length) {
-					clearInterval(_interval)
 
-					res("ready")
-				}
-			}, 400)
-		})
+	Promise.all([getStudentJobPostPromise(is_new, iframe, student_first_name), getStudentRatePromise(selected_student)]).catch(() => alert("Error while fetching job info and hourly rate info"))
+}
+
+function getStudentJobPostPromise(/**@type Boolean*/ isIframeNew, /**@type HTMLIFrameElement */ iframe, student_first_name) {
+	return new Promise((res) => {
+		if (false && !isIframeNew) {
+			return res(findStudentResult(iframe, student_first_name))
+		}
+
+		let _interval = setInterval(() => {
+			//resolve if job-results are found
+			console.log("interval running")
+			// @ts-ignore
+			if (Array.from(iframe.contentWindow.document.querySelectorAll(".job-result")).length) {
+				clearInterval(_interval)
+
+				return res(findStudentResult(iframe, student_first_name))
+			}
+		}, 400)
+	})
+		.then(RenderJobPostDetails)
+		.finally(() => hideSpinner())
+}
+
+function getStudentRatePromise(selected_student) {
+	let rendererFn = renderStudentRate()
+
+	return RateFinder()
+		.getStudent(selected_student.textContent.trim())
+		.then(rendererFn, () => rendererFn({ name: "", rate_online: "NA", rate_inperson: "NA" }))
+}
+
+function renderStudentRate() {
+	console.log("renderStudentRate fired")
+	let rate_p_element
+
+	return (student_rate_info) => {
+		console.log("rate render interval fired")
+		let rate_interval = setInterval(() => {
+			if ((rate_p_element = document.querySelector("p.wzl-student--rate"))) {
+				clearInterval(rate_interval)
+				console.log("%c rate ready", "background:lightblue")
+				return (rate_p_element.innerHTML = ` Online: <strong>${student_rate_info.rate_online}</strong>, Inperson: <strong>${student_rate_info.rate_inperson}</strong>`)
+			}
+		}, 200)
 	}
-
-	hideSpinner()
-
-	let student_rate_info
-	try {
-		student_rate_info = await RateFinder().getStudent(selected_student.textContent.trim())
-	} catch (error) {
-		student_rate_info = { name: "", rate_online: "NA", rate_inperson: "NA" }
-	}
-
-	let wzl_profile = document.querySelector(".wzl-profile")
-
-	if (!wzl_profile) {
-		wzl_profile = document.createElement("div")
-		document.querySelector(".wzl-container").appendChild(wzl_profile)
-	}
-
-	wzl_profile.classList.add("wzl-profile")
-	wzl_profile.innerHTML = makeWzlStudentCard(makeStudentAdapter(findStudentResult(iframe, student_first_name), student_rate_info))
-
-	//add close and reset listeners
-	document.querySelector(".wzl-card--close").addEventListener("click", () => closeWzlCard(false))
-	document.querySelector(".wzl-card--reset").addEventListener("click", () => closeWzlCard(true))
 }
 
 function getConversationSummary(element) {
@@ -163,13 +142,16 @@ function getConversationSummary(element) {
 }
 
 function insertWZLPlaceholder() {
-	if (document.querySelector(".wzl-container")) return
+	let wzl_container
 
-	let wzl = document.createElement("div")
-	wzl.classList.add("wzl", "wzl-container")
-	wzl.appendChild(makeSpinner())
-	document.body.appendChild(wzl)
-	console.log("wzl-container appended to body")
+	if (!(wzl_container = document.querySelector(".wzl-container"))) {
+		wzl_container = document.createElement("div")
+		wzl_container.classList.add("wzl", "wzl-container")
+		wzl_container.appendChild(makeSpinner())
+		document.body.appendChild(wzl_container)
+		console.log("wzl-container appended to body")
+	}
+	return wzl_container
 }
 
 function makeWzlStudentCard(student_info) {
@@ -182,7 +164,10 @@ function makeWzlStudentCard(student_info) {
 		<div class="wzl-card--avatar"></div>
 		<div class="wzl-card--body wzl-student">
 			<p class="wzl-student--username">${student_info.title}</p>
-			<p class="wzl-student--subject">${student_info.time}</p>
+			<div class="wzl-student--subject">
+				<p>${student_info.time}</p>
+				<p class="wzl-student--rate">Online: NA Inperson: NA</p>
+			</div>
 			<p class="wzl-student--description">${student_info.description}</p>
 		</div>
 	</div>
@@ -225,19 +210,24 @@ function makeSpinner() {
  */
 function addIFrame() {
 	//remove existing iframe element
-	let previous_iframe = document.querySelector("#wzl_iframe")
-	if (!!previous_iframe) return { iframe: previous_iframe, is_new: false }
+	let /**@type HTMLIFrameElement */ wzl_iframe = document.querySelector("#wzl_iframe")
 
-	let wzl_iframe = document.createElement("iframe")
+	let is_new = !wzl_iframe
 
-	wzl_iframe.setAttribute("width", "300")
-	wzl_iframe.setAttribute("height", "200")
-	wzl_iframe.classList.add("wzl_iframe")
-	wzl_iframe.setAttribute("id", "wzl_iframe")
+	if (is_new) {
+		wzl_iframe = document.createElement("iframe")
 
-	wzl_iframe.setAttribute("src", "https://www.wyzant.com/tutor/jobapplication/history?sort=1&pagenumber=0&pagesize=100")
+		wzl_iframe.setAttribute("width", "300")
+		wzl_iframe.setAttribute("height", "200")
+		wzl_iframe.classList.add("wzl_iframe")
+		wzl_iframe.setAttribute("id", "wzl_iframe")
 
-	return { iframe: wzl_iframe, is_new: true }
+		wzl_iframe.setAttribute("src", "https://www.wyzant.com/tutor/jobapplication/history?sort=1&pagenumber=0&pagesize=100")
+
+		document.querySelector(".wzl-container").appendChild(wzl_iframe)
+	}
+
+	return { iframe: wzl_iframe, is_new }
 }
 
 function showWzlIndicator() {
@@ -287,7 +277,7 @@ function findStudentResult(iframe, student_first_name) {
 }
 
 /**@return StudentInfo */
-function makeStudentAdapter(job_result, student_rate_info) {
+function makeStudentAdapter(job_result) {
 	let result = {
 		title: "Info not found",
 		time: "Info not found",
@@ -304,11 +294,7 @@ function makeStudentAdapter(job_result, student_rate_info) {
 		}
 	}
 
-	result.time += ` online: ${student_rate_info.rate_online}, inperson: ${student_rate_info.rate_inperson}`
-
 	return result
-
-	//h4 p1,p3
 }
 
 function wzlProfile(event) {

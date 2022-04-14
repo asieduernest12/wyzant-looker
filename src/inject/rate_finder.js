@@ -1,5 +1,5 @@
 export default function RateFinder() {
-	let iframe
+	let /**@type HTMLIFrameElement */ iframe
 	let results
 	let students_map
 	let page_index
@@ -11,12 +11,12 @@ export default function RateFinder() {
 		let student_rows
 		let student
 
-		iframe= document.querySelector('#wzl_rates_iframe')
+		iframe = document.querySelector("#wzl_rates_iframe")
 
 		while (!student) {
 			console.log(student_rows)
 			await queryIframeForStudent(student_name, page_index)
-			student_rows = getStudentRows(iframe.contentWindow.document)
+			if (!(student_rows = getStudentRows(iframe.contentWindow.document))) continue
 			student = convertStudentRowToInfo(findStudentRow(student_rows, student_name))
 			updateStudentsMap(student_rows)
 		}
@@ -49,9 +49,9 @@ export default function RateFinder() {
 		}
 
 		if (page_index) {
-			let next_btn_link = [...iframe.contentWindow.document.querySelectorAll(".ui-page-navigation")].at(-2)
+			let /**@type HTMLAnchorElement*/ next_btn_link = [...iframe.contentWindow.document.querySelectorAll(".ui-page-navigation")].at(-2)
 
-			if (!next_btn_link) throw alert("Error: next_btn_link not found")
+			if (!next_btn_link) throw new AlertError("Error: next_btn_link not found")
 
 			next_btn_link.click()
 		}
@@ -73,24 +73,24 @@ export default function RateFinder() {
 		return students_map
 	}
 
-	/**@return {trs:Element[]} */
+	/**@return {NodeList} */
 	function getStudentRows(/**@type Document*/ document) {
 		return document.querySelectorAll(".SearchTable.wyzTable tr")
 	}
 
 	/**@alias {StudentRow} */
-	function findStudentRow(/**@type {Element[]} */ trs, /**@type String */ student_name) {
-		if (!trs) throw alert("Error: Invalid trs")
+	function findStudentRow(/**@type {NodeList} */ trs, /**@type String */ student_name) {
+		if (!trs) throw new AlertError("Error: Invalid trs")
 
-		if (!student_name) throw alert("Error:student_name invalid")
+		if (!student_name) throw new AlertError("Error:student_name invalid")
 
-		return [...trs].find((tr) => {
+		return [...trs].find((/**@type HTMLElement*/ tr) => {
 			return tr.querySelector("a").textContent.toLowerCase() == student_name.toLowerCase()
 		})
 	}
 
 	function convertStudentRowToInfo(/**@type {StudentRow}*/ tr) {
-		if (!tr) throw alert("Error: tr invalid")
+		if (!tr) throw new AlertError("Error: tr invalid")
 
 		return {
 			name: tr.querySelector("a:nth-of-type(1)").textContent,
@@ -100,4 +100,10 @@ export default function RateFinder() {
 	}
 
 	return { getStudent }
+}
+
+export class AlertError extends Error {
+	constructor(message) {
+		super(message)
+	}
 }

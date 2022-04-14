@@ -1,4 +1,9 @@
 {
 	"include": ["src/"],
-	"compilerOptions": { "alwaysStrict": true, "declaration": true, "target": "ESNext" }
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"declaration": true,
+		"target": "ESNext",
+		"checkJs": true
+	}
 }
