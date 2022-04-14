@@ -48,7 +48,7 @@ function isJobOfferHigher(hour_rate_label_value, hourly_rate_input_node) {
 	return Number(hour_rate_label_value) > parseInt(hourly_rate_input_node.value)
 }
 
-function selectDefaultApplicationMessageResponse = () => {
+function selectDefaultApplicationMessageResponse(){
 	let default_response_option = Array.from(document.querySelectorAll("select[name=template_select] > option").values()).find(({ textContent }) => textContent === "default application")
 
 	if (!default_response_option) return
