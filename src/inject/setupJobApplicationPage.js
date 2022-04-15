@@ -1,3 +1,4 @@
+import { AlertError } from "./rate_finder";
 
 
 export function setupJobApplicationPage() {
@@ -13,6 +14,8 @@ export function setupJobApplicationPage() {
 	selectDefaultApplicationMessageResponse()
 
 	focusSubmitButton()
+
+	makeJobDetailsCardPositionSticky()
 }
 
 function focusSubmitButton() {
@@ -57,4 +60,14 @@ function selectDefaultApplicationMessageResponse(){
 	document.querySelector("select[name=template_select]").value = default_response_option.value
 
 	document.querySelector("textarea#personal_message").value = default_response_option.value
+}
+
+
+function makeJobDetailsCardPositionSticky(){
+	let /**@type HTMLElement */ job_details_card = document.querySelector('.columns.medium-4')
+
+	if (!job_details_card) throw new AlertError('Error: job_details_card not found')
+
+	job_details_card.style.position = 'sticky'
+	job_details_card.style.top = '10px'
 }
