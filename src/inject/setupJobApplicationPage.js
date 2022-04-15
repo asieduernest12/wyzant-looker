@@ -1,10 +1,9 @@
-import { AlertError } from "./rate_finder";
-
+import { AlertError } from "./rate_finder"
 
 export function setupJobApplicationPage() {
-	let hourly_rate_input = document.querySelector("input[name=hourly_rate]")
+	let /**@type HTMLInputElement*/ hourly_rate_input = document.querySelector("input[name=hourly_rate]")
 
-	if (!hourly_rate_input) throw alert("hourly_rate_input is null")
+	if (!hourly_rate_input) throw new AlertError("hourly_rate_input is null")
 
 	hourly_rate_input.setAttribute("type", "number")
 	hourly_rate_input.setAttribute("step", "5")
@@ -21,7 +20,7 @@ export function setupJobApplicationPage() {
 function focusSubmitButton() {
 	let /**@type HTMLElement */ button = document.querySelector("input[type=submit]")
 
-	if (!button) throw alert("input[type=submit] not found")
+	if (!button) throw new AlertError("input[type=submit] not found")
 
 	button.focus()
 }
@@ -51,7 +50,7 @@ function isJobOfferHigher(hour_rate_label_value, hourly_rate_input_node) {
 	return Number(hour_rate_label_value) > parseInt(hourly_rate_input_node.value)
 }
 
-function selectDefaultApplicationMessageResponse(){
+function selectDefaultApplicationMessageResponse() {
 	let default_response_option = Array.from(document.querySelectorAll("select[name=template_select] > option").values()).find(({ textContent }) => textContent === "default application")
 
 	if (!default_response_option) return
@@ -59,15 +58,15 @@ function selectDefaultApplicationMessageResponse(){
 	// @ts-ignore
 	document.querySelector("select[name=template_select]").value = default_response_option.value
 
+	// @ts-ignore
 	document.querySelector("textarea#personal_message").value = default_response_option.value
 }
 
+function makeJobDetailsCardPositionSticky() {
+	let /**@type HTMLElement */ job_details_card = document.querySelector(".columns.medium-4")
 
-function makeJobDetailsCardPositionSticky(){
-	let /**@type HTMLElement */ job_details_card = document.querySelector('.columns.medium-4')
+	if (!job_details_card) throw new AlertError("Error: job_details_card not found")
 
-	if (!job_details_card) throw new AlertError('Error: job_details_card not found')
-
-	job_details_card.style.position = 'sticky'
-	job_details_card.style.top = '10px'
+	job_details_card.style.position = "sticky"
+	job_details_card.style.top = "10px"
 }
