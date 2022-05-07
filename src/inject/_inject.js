@@ -1,4 +1,5 @@
 // @ts-check
+import Lessons from "./lessons"
 import RateFinder from "./rate_finder"
 import { setupJobApplicationPage } from "./setupJobApplicationPage"
 
@@ -11,6 +12,7 @@ function init() {
 	const LOCATION_TRIGGER_TOKENS = {
 		job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs\/\d+/,
 		message_page: /https:\/\/www.wyzant.com\/tutor\/messaging/,
+		lessons_page: /https:\/\/www.wyzant.com\/tutor\/lessons/,
 		// students_info_page: /https:\/\/www.wyzant.com\/tutor\/students\/index/,
 	}
 
@@ -22,19 +24,27 @@ function init() {
 
 	switch (page) {
 		case "students_info_page":
-		case "message_page":
+		case "message_page": {
 			console.log("wzl message_page")
 			insertWZLPlaceholder()
-			showWzlIndicator()
-
+			showWzlIndicator().addEventListener("click", wzlConvoClickHandler)
 			break
+		}
 		case "job_application_submit_page": {
 			//change hourly-rate input to number
 			console.log("wzl job_application_submit_page")
 			setupJobApplicationPage()
 			break
 		}
-
+		case "lessons_page": {
+			insertWZLPlaceholder()
+			showWzlIndicator().addEventListener("click", () => {
+				showSpinner()
+				Lessons(makeProfileElement(), window.location.href)
+				hideSpinner()
+			})
+			break
+		}
 		default:
 			break
 	}
@@ -45,14 +55,7 @@ function isConvoPage(_url) {
 }
 
 const RenderJobPostDetails = (student_result_info) => {
-	let wzl_profile = document.querySelector(".wzl-profile")
-
-	if (!wzl_profile) {
-		wzl_profile = document.createElement("div")
-		document.querySelector(".wzl-container").appendChild(wzl_profile)
-	}
-
-	wzl_profile.classList.add("wzl-profile")
+	let wzl_profile = makeProfileElement()
 	wzl_profile.innerHTML = makeWzlStudentCard(makeStudentAdapter(student_result_info))
 
 	//add close and reset listeners
@@ -61,6 +64,18 @@ const RenderJobPostDetails = (student_result_info) => {
 	console.log("%c job post details ready", "background:lightyellow")
 	return
 }
+function makeProfileElement() {
+	let wzl_profile = document.querySelector(".wzl-profile")
+
+	if (!wzl_profile) {
+		wzl_profile = document.createElement("div")
+		document.querySelector(".wzl-container").appendChild(wzl_profile)
+	}
+
+	wzl_profile.classList.add("wzl-profile")
+	return wzl_profile
+}
+
 //check for document readystate
 // document.querySelector("#messaging-app").addEventListener("click", messageDocumentClickHandler);
 
@@ -158,7 +173,7 @@ function makeWzlStudentCard(student_info) {
 	if (!student_info) return
 
 	return `
-	<div class="wzl-card">
+	<div class="wzl-card bg-hue">
 		<span class="wzl-card--close">X</span>
 		<span class="wzl-card--reset">Close & Reset</span>
 		<div class="wzl-card--avatar"></div>
@@ -237,7 +252,7 @@ function showWzlIndicator() {
 	ready_indicator.classList.add("wzl_indicator")
 	ready_indicator.setAttribute("tooltip", "Click to enable profile lookup of students (underlined)")
 	wzl_cont.appendChild(ready_indicator)
-	ready_indicator.addEventListener("click", wzlConvoClickHandler)
+	return ready_indicator
 }
 
 function wzlConvoClickHandler(event) {
