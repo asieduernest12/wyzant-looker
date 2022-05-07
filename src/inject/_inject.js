@@ -2,6 +2,7 @@
 import Lessons from "./lessons"
 import RateFinder from "./rate_finder"
 import { setupJobApplicationPage } from "./setupJobApplicationPage"
+import StatisticsPage from "./statistics"
 
 /**@typedef {{title,time,description,rate:Number}} StudentInfo */
 
@@ -13,6 +14,7 @@ function init() {
 		job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs\/\d+/,
 		message_page: /https:\/\/www.wyzant.com\/tutor\/messaging/,
 		lessons_page: /https:\/\/www.wyzant.com\/tutor\/lessons/,
+		statistics_page: /https:\/\/www.wyzant.com\/tutor\/statistics/,
 		// students_info_page: /https:\/\/www.wyzant.com\/tutor\/students\/index/,
 	}
 
@@ -34,6 +36,11 @@ function init() {
 			//change hourly-rate input to number
 			console.log("wzl job_application_submit_page")
 			setupJobApplicationPage()
+			break
+		}
+
+		case "statistics_page": {
+			StatisticsPage(window.location.href)
 			break
 		}
 		case "lessons_page": {

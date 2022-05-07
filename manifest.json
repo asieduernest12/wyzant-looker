@@ -15,7 +15,7 @@
 			"css": ["src/inject/inject.css"]
 		},
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*","https://www.wyzant.com/tutor/lessons/*"],
+			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*","https://www.wyzant.com/tutor/lessons/*","https://www.wyzant.com/tutor/statistics/*"],
 			"js": ["src/inject/inject.js"]
 		}
 	]
