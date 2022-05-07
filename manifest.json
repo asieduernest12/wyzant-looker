@@ -1,6 +1,6 @@
 {
 	"name": "Wyzant-looker",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"manifest_version": 3,
 	"description": "See job post details from tutor messaging page and add increase and decrease buttons to price rate in job application details page",
 	"homepage_url": "https://github.com/asieduernest12/wyzant-looker",
@@ -11,11 +11,11 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*"],
+			"matches": ["https://www.wyzant.com/tutor/messaging/*","https://www.wyzant.com/tutor/lessons/*"],
 			"css": ["src/inject/inject.css"]
 		},
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*"],
+			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/jobs/*","https://www.wyzant.com/tutor/lessons/*"],
 			"js": ["src/inject/inject.js"]
 		}
 	]
