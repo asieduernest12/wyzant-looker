@@ -10,10 +10,9 @@ function init() {
 	let page_url = window.location.href.trim()
 
 	const LOCATION_TRIGGER_TOKENS = {
-		job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs\/\d+/,
+		job_application_submit_page: /https:\/\/www.wyzant.com\/tutor\/jobs(application\/\w+|\/\d+)/,
 		message_page: /https:\/\/www.wyzant.com\/tutor\/messaging/,
 		lessons_page: /https:\/\/www.wyzant.com\/tutor\/lessons/,
-		// students_info_page: /https:\/\/www.wyzant.com\/tutor\/students\/index/,
 	}
 
 	let [page] = Object.entries(LOCATION_TRIGGER_TOKENS)
