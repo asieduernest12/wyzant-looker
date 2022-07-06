@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "jar -cfM dist/wyzant-looker.zip src icons manifest.json Readme.md",
-		"changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > dist/changelog.md",
+    "changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > dist/changelog.md",
     "dev": "npx esbuild --bundle src/inject/_inject.js --minify --sourcemap=inline --outfile=src/inject/inject.js --watch",
     "prod": "npx esbuild --bundle src/inject/_inject.js --minify --outfile=src/inject/inject.js && npm run changelog-gen && npm run package"
   },
@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/asieduernest12/wyzant-looker/issues"
   },
-  "homepage": "https://github.com/asieduernest12/wyzant-looker#readme"
+  "homepage": "https://github.com/asieduernest12/wyzant-looker#readme",
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
 }
