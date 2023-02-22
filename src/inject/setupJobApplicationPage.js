@@ -1,9 +1,20 @@
 import { AlertError } from './rate_finder';
 
-export function setupJobApplicationPage() {
-  const /** @type HTMLInputElement */ hourly_rate_input = document.querySelector('input[name=hourly_rate]');
+const getHourlyRateInput = () => /** @type HTMLInputElement */(document.querySelector('input[name=hourly_rate]'))
+const getSubmitButton = () =>/** @type HTMLElement */(document.querySelector('input[type=submit]'))
 
-  if (!hourly_rate_input) throw new AlertError('hourly_rate_input is null');
+const makeForceSubmitButton = () => {
+  const forceSubmitButton = document.createElement('button');
+  forceSubmitButton.classList.add('btn', 'old-btn-color')
+  forceSubmitButton.setAttribute('title','force submit using current value indicated')
+  forceSubmitButton.textContent = '>>';
+  return forceSubmitButton
+}
+
+export function setupJobApplicationPage() {
+  const hourly_rate_input = getHourlyRateInput();
+
+  if (!hourly_rate_input) throw new AlertError('Error: hourly_rate_input is null');
 
   hourly_rate_input.setAttribute('type', 'number');
   hourly_rate_input.setAttribute('step', '5');
@@ -13,14 +24,34 @@ export function setupJobApplicationPage() {
   selectDefaultApplicationMessageResponse();
 
   focusSubmitButton();
+  setupForceSubmit()
 
   makeJobDetailsCardPositionSticky();
 }
 
-function focusSubmitButton() {
-  const /** @type HTMLElement */ button = document.querySelector('input[type=submit]');
+function setupForceSubmit(/** @type {HTMLButtonElement}*/ submitButton = getSubmitButton(), hourlyRateInput = getHourlyRateInput()) {
+  // make force submit
+  const forceSubmitButton = makeForceSubmitButton()
 
-  if (!button) throw new AlertError('input[type=submit] not found');
+  // attach append as next sibling to submit
+  submitButton.parentNode.appendChild(forceSubmitButton);
+
+  // setup force submit click
+  forceSubmitButton.addEventListener('click', () => {
+    // force submit click
+
+    // 1 update value attribute on input to match its actual value
+    hourlyRateInput.setAttribute('value', Number(hourlyRateInput.value))
+
+    // 2 trigger submit
+    submitButton.click()
+  })
+
+}
+
+function focusSubmitButton(button = getSubmitButton()) {
+
+  if (!button) throw new AlertError('Error: input[type=submit] not found');
 
   button.focus();
 }
