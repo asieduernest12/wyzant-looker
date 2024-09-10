@@ -1,4 +1,11 @@
 // @ts-check
+import { getDate } from '../../node_modules/date-fns/getDate';
+import { getDay } from '../../node_modules/date-fns/getDay';
+import { getDayOfYear } from '../../node_modules/date-fns/getDayOfYear';
+import { getDaysInMonth } from '../../node_modules/date-fns/getDaysInMonth';
+import { getDaysInYear } from '../../node_modules/date-fns/getDaysInYear';
+import { subMonths } from '../../node_modules/date-fns/subMonths';
+import { subYears } from '../../node_modules/date-fns/subYears';
 import Lessons from './lessons';
 import RateFinder from './rate_finder';
 import { setupJobApplicationPage } from './setupJobApplicationPage';
@@ -333,32 +340,52 @@ function init() {
 		statistics_page: {
 			test: /https:\/\/www.wyzant.com\/tutor\/statistics/,
 			action: () => {
+				insertWZLPlaceholder();
+				showWzlIndicator();
 				//grab the table
 				const statTable = document.querySelector('table.SearchTable');
-				if (!/yout stats/i.test(statTable.textContent)) {
+				const isStatTable = /your stats/i.test(statTable.closest('.row').querySelector('.gray-header').textContent);
+				console.log({ isStatTable, statTable });
+				if (!isStatTable) {
 					return;
 				}
 
-				statTable.querySelectorAll('tr').forEach((tr, index) => {
+				const statTableRows = [...statTable.querySelectorAll('tr')];
+				console.log({ statTableRows });
+
+				const loggable = statTableRows.map((tr, index) => {
+					console.log({ tr });
+					let hrsDaily, $daily, daysCount, earnings, totalHours, $hourly, daysTd;
+					const rowLabel = tr.querySelectorAll('td')[0]?.textContent?.toLowerCase();
+
 					if (index === 0) {
 						// for header row add hrs/daily, $/daily
-						const [hrsDaily, $daily] = ['th', 'th'].map((i) => document.createElement(i));
+						[hrsDaily, $daily, $hourly, daysTd] = ['th', 'th', 'th', 'th'].map((i) => document.createElement(i));
 						hrsDaily.textContent = 'Hrs/Daily';
 						$daily.textContent = '$/Daily';
-						[hrsDaily, $daily].forEach((el) => tr.append(el));
-						return;
+						$hourly.textContent = '$/Hr';
+						daysTd.textContent = 'Days';
+					} else {
+						[hrsDaily, $daily, $hourly, daysTd] = ['td', 'td', 'td', 'td'].map((i) => document.createElement(i));
+						daysCount = {
+							'this month': getDate(new Date()),
+							'last month': getDaysInMonth(subMonths(new Date(), 1)),
+							'year to date': getDayOfYear(new Date()),
+							'last year': getDaysInYear(subYears(new Date(), 1)),
+						}[rowLabel.toLocaleLowerCase()];
+						earnings = Number(tr.querySelectorAll('td')[2]?.textContent?.replace(/\$/, '').replace(',', ''));
+						totalHours = Number(tr.querySelectorAll('td')[1]?.textContent?.replace(/,/, ''));
+
+						hrsDaily.textContent = Number(totalHours / daysCount).toFixed(2) + '';
+						$daily.textContent = '$' + Number(earnings / daysCount).toFixed(2);
+						daysTd.textContent = daysCount;
+						$hourly.textContent = Number(earnings / totalHours).toFixed(2);
 					}
-
-					const [hrsDaily, $daily] = ['td', 'td'].map((i) => document.createElement(i));
-					const daysCount = /month/i.test(tr.querySelectorAll('td')[0]?.textContent) ? 31 : 365;
-					const earnings = Number(tr.querySelectorAll('td')[2]?.textContent?.replace('$', ''));
-					const totalHours = Number(tr.querySelectorAll('td')[1]?.textContent?.replace('$', ''));
-
-					hrsDaily.textContent = totalHours / daysCount + '';
-					$daily.textContent = '$' + earnings / daysCount;
-					[hrsDaily, $daily].forEach((el) => tr.append(el));
-					return;
+					[hrsDaily, $daily, $hourly, daysTd].forEach((el) => tr.append(el));
+					return { rowLabel, index, earnings, totalHours, daysCount, $hourly };
 				});
+
+				console.table(loggable);
 				// for each row hours/ title.includes('month')?31:365 , earned/hours
 			},
 		},
