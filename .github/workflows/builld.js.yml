@@ -39,3 +39,13 @@ jobs:
         with:
           artifacts: "dist/wyzant-looker.zip, dist/changelog.md"
           token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload to Chrome Web Store
+        uses: mobilefirstllc/cws-publish@latest
+        with:
+          action: 'upload'  # one of: upload, publish, testers
+          client_id: ${{ secrets.CLIENTID }}
+          client_secret: ${{ secrets.CLIENTSECRET }}
+          refresh_token: ${{ secrets.TOKEN }}
+          extension_id: '32-CHAR EXTENSION ID' 
+          zip_file: 'dist/wyzant-looker.zip'
