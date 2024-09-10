@@ -1,4 +1,4 @@
-name: Release project
+name: Tag & Release project
 on:
   workflow_dispatch:
   pull_request:
