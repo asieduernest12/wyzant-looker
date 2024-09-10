@@ -14,9 +14,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: "Bump Version"
-        uses: marier-nico/pr-bump@v1.0.0
-        with:
-          configuration: ".github/workflows/pr_bump_config.json"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: huggingface/semver-release-action@latest
