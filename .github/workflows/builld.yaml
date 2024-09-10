@@ -31,7 +31,6 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: |
             npm ci
-            mkdir dist 
             npm run prod
             npm run package
       
