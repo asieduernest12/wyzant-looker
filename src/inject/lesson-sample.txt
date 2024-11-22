@@ -1,0 +1,16 @@
+It was great to connect with [name] and take a look at the challenge at hand.
+
+subject: [subject]
+project: [project]
+technologies: [technologies]
+
+task:
+-
+
+challenges:
+-
+
+atmosphere:
+-
+
+Looking forward to working with [name] again.

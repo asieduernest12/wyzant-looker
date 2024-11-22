@@ -1,4 +1,4 @@
-import { AlertError } from './rate_finder';
+import { AlertError } from '@src/inject/rate_finder';
 
 export default function Lessons(/** @type Element */ container_element, /** @type string */ url) {
   let lesson_map;
