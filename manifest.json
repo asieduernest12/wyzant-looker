@@ -11,15 +11,12 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://www.wyzant.com/tutor/messaging/*", "https://www.wyzant.com/tutor/lessons/*", "https://www.wyzant.com/tutor/statistics"],
+			"matches": ["https://*.wyzant.com/tutor/messaging/*", "https://*.wyzant.com/tutor/lessons/*", "https://*.wyzant.com/tutor/statistics"],
 			"css": ["src/inject/inject.css"]
 		},
 		{
 			"matches": [
-				"https://www.wyzant.com/tutor/messaging/*",
-				"https://www.wyzant.com/tutor/job*",
-				"https://www.wyzant.com/tutor/lessons/*",
-				"https://www.wyzant.com/tutor/statistics"
+				"https://*.wyzant.com/tutor/*"
 			],
 			"js": ["src/inject/inject.js"]
 		}
