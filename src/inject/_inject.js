@@ -1,15 +1,15 @@
 // @ts-check
-import { getDate } from "../../node_modules/date-fns/getDate";
-import { getDay } from "../../node_modules/date-fns/getDay";
-import { getDayOfYear } from "../../node_modules/date-fns/getDayOfYear";
-import { getDaysInMonth } from "../../node_modules/date-fns/getDaysInMonth";
-import { getDaysInYear } from "../../node_modules/date-fns/getDaysInYear";
-import { subMonths } from "../../node_modules/date-fns/subMonths";
-import { subYears } from "../../node_modules/date-fns/subYears";
-import Lessons from "./lessons";
-import RateFinder from "./rate_finder";
-import { setupJobApplicationPage } from "./setupJobApplicationPage";
 import lessonReviewSubmissionTemplateText from "./lesson-sample.txt";
+import { setupJobApplicationPage } from "./setupJobApplicationPage";
+import { getDaysInMonth } from "date-fns";
+import { getDaysInYear } from "date-fns";
+import { getDayOfYear } from "date-fns";
+import RateFinder from "./rate_finder";
+import { subMonths } from "date-fns";
+import { subYears } from "date-fns";
+import { getDate } from "date-fns";
+import { getDay } from "date-fns";
+import Lessons from "./lessons";
 
 /** @typedef {{title,time,description,rate:Number}} StudentInfo */
 
