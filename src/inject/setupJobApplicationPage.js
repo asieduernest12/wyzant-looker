@@ -1,4 +1,4 @@
-import { AlertError } from './rate_finder';
+import { AlertError } from '@src/inject/rate_finder';
 
 const getHourlyRateInput = () => /** @type HTMLInputElement */(document.querySelector('input[name=hourly_rate]'))
 const getSubmitButton = () =>/** @type HTMLElement */(document.querySelector('input[type=submit]'))
