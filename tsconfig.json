@@ -1,0 +1,15 @@
+{
+	"include": ["src/"],
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"declaration": true,
+		"target": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "nodenext",
+		"checkJs": true,
+		"baseUrl": ".",
+		"paths": {
+			"@src/*": ["src/*"]
+		}
+	}
+}

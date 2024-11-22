@@ -8,7 +8,11 @@
     "package": "jar -cfM dist/wyzant-looker.zip src icons manifest.json Readme.md",
     "changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > dist/changelog.md",
     "dev": "npx esbuild --bundle src/inject/_inject.js --minify --sourcemap=inline --outfile=src/inject/inject.js --watch",
-    "prod": "npx esbuild --bundle src/inject/_inject.js --minify --outfile=src/inject/inject.js && npm run changelog-gen && npm run package"
+    "chrome:load:unpacked": "google-chrome --load-extension=./",
+    "prod": "npx esbuild --bundle src/inject/_inject.js --minify --outfile=src/inject/inject.js && npm run changelog-gen && npm run package",
+    "lint:prettier": "npx prettier -w ./src",
+    "lint:eslint": "npx eslint --fix ./src",
+    "lint": "npm run lint:eslint && npm run lint:prettier"
   },
   "repository": {
     "type": "git",
@@ -21,9 +25,17 @@
   },
   "homepage": "https://github.com/asieduernest12/wyzant-looker#readme",
   "devDependencies": {
-    "eslint": "^8.19.0",
+    "@babel/parser": "^7.26.2",
+    "@eslint/js": "^9.15.0",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-organize-imports": "^0.0.46",
+    "eslint-plugin-path-alias": "^2.1.0",
+    "globals": "^15.12.0",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "date-fns": "^3.6.0"
