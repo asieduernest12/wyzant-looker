@@ -12,13 +12,13 @@
 	"content_scripts": [
 		{
 			"matches": ["https://*.wyzant.com/tutor/messaging/*", "https://*.wyzant.com/tutor/lessons/*", "https://*.wyzant.com/tutor/statistics"],
-			"css": ["src/inject/inject.css"]
+			"css": ["src/main.css"]
 		},
 		{
 			"matches": [
 				"https://*.wyzant.com/tutor/*"
 			],
-			"js": ["src/inject/inject.js"]
+			"js": ["out/main.js"]
 		}
 	]
 }

@@ -1,8 +1,8 @@
-import eslintPluginOrganizeImports from "eslint-plugin-organize-imports";
+import pluginJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginImport from "eslint-plugin-import";
+import eslintPluginOrganizeImports from "eslint-plugin-organize-imports";
 import pathAlias from "eslint-plugin-path-alias";
-import pluginJs from "@eslint/js";
 import globals from "globals";
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -22,12 +22,10 @@ export default [
             "import/newline-after-import": "error",
             "import/no-duplicates": "error",
             "import/no-relative-packages": "error",
-            "no-unused-vars": ["error", { "args": "none" }],
+            "no-unused-vars": ["error", { args: "none" }],
             "path-alias/no-relative": "error",
             "no-undef": ["error", { typeof: true }],
-
         },
-        // ignores: ["**/inject.js","**/out"],
-        files:["**src/*"]
+        files: ["**src/*"],
     },
 ];
