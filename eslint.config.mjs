@@ -27,6 +27,7 @@ export default [
             "no-undef": ["error", { typeof: true }],
 
         },
-        ignores: ["**/inject.js"],
+        // ignores: ["**/inject.js","**/out"],
+        files:["**src/*"]
     },
 ];
