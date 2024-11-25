@@ -17,13 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
      
-      - name: update manifest version to release version
-        run: |
-            ext_version_name=${{github.ref_name}}
-            echo $ext_version_name
-            ext_version_id=$(echo $ext_version_name | tr -d [:alpha:] | tr -d [=-=])
-            sed -i "s/0.0.8/$ext_version_id/" manifest.json
-            sed -i "s/VERSION_NAME/$ext_version_name/" manifest.json
+      # - name: update manifest version to release version
+      #   run: |
+      #       ext_version_name=${{github.ref_name}}
+      #       echo $ext_version_name
+      #       ext_version_id=$(echo $ext_version_name | tr -d [:alpha:] | tr -d [=-=])
+      #       sed -i "s/0.0.8/$ext_version_id/" manifest.json
+      #       sed -i "s/VERSION_NAME/$ext_version_name/" manifest.json
       
       - name: Setup node
         uses: actions/setup-node@v3
@@ -31,6 +31,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: |
             npm ci
+            npm run release
             npm run prod
             npm run package
 
