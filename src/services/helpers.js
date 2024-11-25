@@ -1,16 +1,9 @@
-// @ts-check
-import { getDate, getDay, getDayOfYear, getDaysInMonth, getDaysInYear, subMonths, subYears } from "date-fns";
-import lessonReviewSubmissionTemplateText from "@src/inject/lesson-sample.txt";
-import { setupJobApplicationPage } from "@src/inject/setupJobApplicationPage";
-import RateFinder from "@src/inject/rate_finder";
-import Lessons from "@src/inject/lessons";
+import RateFinder from "@src/services/rate_finder";
 
 /** @typedef {{title,time,description,rate:Number}} StudentInfo */
-
 /** @type MutationObserver */
 let convosObserver = null;
-
-function makeProfileElement() {
+export function makeProfileElement() {
     let localWzlProfile = document.querySelector(".wzl-profile");
 
     if (!localWzlProfile) {
@@ -22,11 +15,10 @@ function makeProfileElement() {
     return localWzlProfile;
 }
 
-function getConversationSummary(element) {
+export function getConversationSummary(element) {
     return element.closest(".conversation-summary-wrap");
 }
-
-function renderStudentRate() {
+export function renderStudentRate() {
     console.log("renderStudentRate fired");
     let ratePElement;
 
@@ -43,8 +35,7 @@ function renderStudentRate() {
         }, 200);
     };
 }
-
-function getStudentRatePromise(selectedStudent) {
+export function getStudentRatePromise(selectedStudent) {
     const rendererFn = renderStudentRate();
 
     return RateFinder()
@@ -57,8 +48,7 @@ function getStudentRatePromise(selectedStudent) {
             })
         );
 }
-
-function makeWzlStudentCard(studentInfo) {
+export function makeWzlStudentCard(studentInfo) {
     return !studentInfo
         ? ""
         : `
@@ -77,16 +67,14 @@ function makeWzlStudentCard(studentInfo) {
       </div>
 	`;
 }
-
-function makeSpinner() {
+export function makeSpinner() {
     const spinnerHtml = '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
     const spinnerContainer = document.createElement("div");
     spinnerContainer.classList.add("wzl-spinner-container");
     spinnerContainer.innerHTML = spinnerHtml;
     return spinnerContainer;
 }
-
-function insertWZLPlaceholder() {
+export function insertWZLPlaceholder() {
     let wzlContainer = document.querySelector(".wzl-container");
 
     if (!wzlContainer) {
@@ -103,7 +91,7 @@ function insertWZLPlaceholder() {
  *
  * @returns {{iframe: HTMLIFrameElement, isNew: Boolean} }
  */
-function addIFrame() {
+export function addIFrame() {
     // remove existing iframe element
     let /** @type HTMLIFrameElement */ wzlIfram = document.querySelector("#wzl_iframe");
 
@@ -124,8 +112,7 @@ function addIFrame() {
 
     return { iframe: wzlIfram, isNew };
 }
-
-function showWzlIndicator() {
+export function showWzlIndicator() {
     const wzlCont = document.querySelector(".wzl-container");
     const readyIndicator = document.createElement("button");
     readyIndicator.textContent = "Wzl Ready";
@@ -135,35 +122,32 @@ function showWzlIndicator() {
     return readyIndicator;
 }
 
-function activateWzlIndicator() {
+export function activateWzlIndicator() {
     document.querySelector(".wzl_indicator").classList.add("wzl_indicator_active");
 }
-function deActivateWzlIndicator() {
+export function deActivateWzlIndicator() {
     document.querySelector(".wzl_indicator").classList.remove("wzl_indicator_active");
 }
-
-function showMoreConvoBtnClick() {
+export function showMoreConvoBtnClick() {
     deActivateWzlIndicator();
 }
-
-function findStudentResult(iframe, studentFirstName) {
+export function findStudentResult(iframe, studentFirstName) {
     console.log("findStudentResult called");
     const jobNodes = iframe.contentWindow.document.querySelectorAll(".job-result");
     const jobs = Array.from(jobNodes);
     const firstFound = jobs.find(job => job.textContent.includes(studentFirstName));
     return firstFound;
 }
-
-function showSpinner() {
+export function showSpinner() {
     document.querySelector(".wzl-spinner-container").classList.add("show");
 }
 
-function hideSpinner() {
+export function hideSpinner() {
     document.querySelector(".wzl-spinner-container").classList.remove("show");
 }
 
 /** @return StudentInfo */
-function makeStudentAdapter(jobResult) {
+export function makeStudentAdapter(jobResult) {
     let result = {
         title: "Info not found",
         time: "Info not found",
@@ -182,8 +166,7 @@ function makeStudentAdapter(jobResult) {
 
     return result;
 }
-
-function closeWzlCard(reset) {
+export function closeWzlCard(reset) {
     // remove
     document.querySelector(".wzl-card").remove();
 
@@ -205,7 +188,6 @@ function closeWzlCard(reset) {
         deActivateWzlIndicator();
     }
 }
-
 const RenderJobPostDetails = studentResultInfo => {
     const localWzlProfile = makeProfileElement();
     localWzlProfile.innerHTML = makeWzlStudentCard(makeStudentAdapter(studentResultInfo));
@@ -215,8 +197,7 @@ const RenderJobPostDetails = studentResultInfo => {
     document.querySelector(".wzl-card--reset").addEventListener("click", () => closeWzlCard(true));
     console.log("%c job post details ready", "background:lightyellow");
 };
-
-function getStudentJobPostPromise(/** @type Boolean */ isIframeNew, /** @type HTMLIFrameElement */ iframe, studentFirstName) {
+export function getStudentJobPostPromise(/** @type Boolean */ isIframeNew, /** @type HTMLIFrameElement */ iframe, studentFirstName) {
     return new Promise(res => {
         if (!isIframeNew) {
             res(findStudentResult(iframe, studentFirstName));
@@ -236,8 +217,7 @@ function getStudentJobPostPromise(/** @type Boolean */ isIframeNew, /** @type HT
         .then(RenderJobPostDetails)
         .finally(() => hideSpinner());
 }
-
-function messageDocumentClickHandler(event) {
+export function messageDocumentClickHandler(event) {
     const previousCard = document.querySelector(".wzl-profile");
 
     if (previousCard) previousCard.remove();
@@ -268,8 +248,7 @@ function messageDocumentClickHandler(event) {
         alert("Error while fetching job info and hourly rate info")
     );
 }
-
-function observeNewConversations() {
+export function observeNewConversations() {
     const convoUl = document.getElementsByClassName("ul-wrap").item(0);
 
     if (convosObserver) return;
@@ -285,8 +264,7 @@ function observeNewConversations() {
         subtree: true,
     });
 }
-
-function wzlConvoClickHandler() {
+export function wzlConvoClickHandler() {
     // add event lister to all conversation summary items
     const convos = Array.from(document.querySelectorAll(".conversation-summary-wrap")).filter(convo => !convo.classList.contains("wzl-listener-active"));
     if (convos.length) {
@@ -304,163 +282,3 @@ function wzlConvoClickHandler() {
 
     observeNewConversations();
 }
-
-function init() {
-    console.log("wzl script injected");
-    const pageUrl = window.location.href.trim();
-
-    /** @type {Record<string,{test:RegExp,action:()=>void}>} */
-    const LOCATION_TRIGGER_TOKENS = {
-        job_application_submit_page: {
-            test: /(https:\/\/www.)?wyzant.com\/tutor\/job(application\/apply|s)\/\d+/,
-            action: () => {
-                // change hourly-rate input to number
-                console.log("wzl job_application_submit_page");
-                setupJobApplicationPage();
-            },
-        },
-        message_page: {
-            test: /(https:\/\/www.)?wyzant.com\/tutor\/messaging/,
-            action: () => {
-                console.log("wzl message_page");
-                insertWZLPlaceholder();
-                showWzlIndicator().addEventListener("click", wzlConvoClickHandler);
-            },
-        },
-        lessons_page: {
-            test: /(https:\/\/www.)?wyzant.com\/tutor\/lessons/,
-            action: () => {
-                insertWZLPlaceholder();
-                showWzlIndicator().addEventListener("click", () => {
-                    showSpinner();
-                    Lessons(makeProfileElement(), window.location.href);
-                    hideSpinner();
-                });
-            },
-        },
-        statistics_page: {
-            test: /(https:\/\/www.)?wyzant.com\/tutor\/statistics/,
-            action: () => {
-                insertWZLPlaceholder();
-                showWzlIndicator();
-                //grab the table
-                const statTable = document.querySelector("table.SearchTable");
-                const isStatTable = /your stats/i.test(statTable.closest(".row").querySelector(".gray-header").textContent);
-                console.log({
-                    isStatTable,
-                    statTable,
-                });
-                if (!isStatTable) {
-                    return;
-                }
-
-                const statTableRows = [...statTable.querySelectorAll("tr")];
-                console.log({
-                    statTableRows,
-                });
-
-                const loggable = statTableRows.map((tr, index) => {
-                    console.log({ tr });
-                    let hrsDaily, $daily, daysCount, earnings, totalHours, $hourly, daysTd;
-                    const rowLabel = tr.querySelectorAll("td")[0]?.textContent?.toLowerCase();
-
-                    if (index === 0) {
-                        // for header row add hrs/daily, $/daily
-                        [hrsDaily, $daily, $hourly, daysTd] = ["th", "th", "th", "th"].map(i => document.createElement(i));
-                        hrsDaily.textContent = "Hrs/Daily";
-                        $daily.textContent = "$/Daily";
-                        $hourly.textContent = "$/Hr";
-                        daysTd.textContent = "Days";
-                    } else {
-                        [hrsDaily, $daily, $hourly, daysTd] = ["td", "td", "td", "td"].map(i => document.createElement(i));
-                        daysCount = {
-                            "this month": getDate(new Date()),
-                            "last month": getDaysInMonth(subMonths(new Date(), 1)),
-                            "year to date": getDayOfYear(new Date()),
-                            "last year": getDaysInYear(subYears(new Date(), 1)),
-                        }[rowLabel.toLocaleLowerCase()];
-                        earnings = Number(tr.querySelectorAll("td")[2]?.textContent?.replace(/\$/, "").replace(",", ""));
-                        totalHours = Number(tr.querySelectorAll("td")[1]?.textContent?.replace(/,/, ""));
-
-                        hrsDaily.textContent = Number(totalHours / daysCount).toFixed(2) + "";
-                        $daily.textContent = "$" + Number(earnings / daysCount).toFixed(2);
-                        daysTd.textContent = daysCount;
-                        $hourly.textContent = Number(earnings / totalHours).toFixed(2);
-                    }
-                    [hrsDaily, $daily, $hourly, daysTd].forEach(el => tr.append(el));
-                    return {
-                        rowLabel,
-                        index,
-                        earnings,
-                        totalHours,
-                        daysCount,
-                        $hourly,
-                    };
-                });
-
-                console.table(loggable);
-                // for each row hours/ title.includes('month')?31:365 , earned/hours
-            },
-        },
-        submitLessonReview: {
-            test: /wyzant.com\/tutor\/submitlesson\/detail\?suid=\d+/,
-            action: () => {
-                insertWZLPlaceholder();
-                showWzlIndicator();
-
-                const lessonReportTextField = /** @type {HTMLTextAreaElement} */ (document.querySelector("textarea[name=LessonReview][id=LessonReview]"));
-                const studentName = document.querySelector('a[href^="/tutor/students/view?suid"]')?.textContent?.replace(/\n|\W{3,}/g, "");
-                const studentSubject = /** @type {HTMLSelectElement} */ (document.querySelector("select[name=SubjectID][id=SubjectID]"))?.selectedOptions[0]?.text?.replace(
-                    /\n|\W{3,}/g,
-                    ""
-                );
-
-                if ([studentName, studentSubject, lessonReportTextField].some(x => !x)) {
-                    console.log("abort lesson review prefill");
-                    alert("abort: lesson review prefill");
-                    return;
-                }
-
-                const processedTemplate = ("" + lessonReviewSubmissionTemplateText).replaceAll("[name]", studentName).replaceAll("[subject]", studentSubject);
-
-                lessonReportTextField.value = processedTemplate;
-
-                /**
-                 * add a mutationObserver
-                 * on nodes added: find input[name=confirmLesson] and sibling label
-                 * add [id=confirmLesson] to input[name=confirmLesson]
-                 * add [for="confirmLesson"] to the label
-                 */
-                const observer = new MutationObserver(mutationsList => {
-                    const isMutationTypeChildList = mutationsList.some(mutation => mutation.type === "childList");
-
-                    if (!isMutationTypeChildList) return;
-
-                    const confirmLessonInput = document.querySelector("input[name=confirmLesson]");
-                    const confirmLessonLabel = confirmLessonInput?.nextElementSibling;
-
-                    if (!confirmLessonInput || !confirmLessonLabel) {
-                        return;
-                    }
-
-                    confirmLessonInput.id = "confirmLesson";
-                    confirmLessonLabel.setAttribute("for", "confirmLesson");
-                    observer.disconnect();
-                });
-
-                observer.observe(document.body, {
-                    childList: true,
-                    subtree: true,
-                });
-            },
-        },
-    };
-
-    const [key, pageItem] = Object.entries(LOCATION_TRIGGER_TOKENS).find(([, { test }]) => test.test(pageUrl));
-
-    console.log("wlz page target", key);
-
-    pageItem?.action();
-}
-
-init();
