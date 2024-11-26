@@ -3,7 +3,7 @@ import { insertWZLPlaceholder, showWzlIndicator } from "@src/services/helpers";
 import lessonReviewSubmissionTemplateText from "@src/templates/lessonReviewSubmission.tmpl.txt";
 
 export const submitLessonReview = makeRouteHandlerConfig({
-    test: /wyzant.com\/tutor\/submitlesson\/detail\?suid=\d+/,
+    test: /wyzant.com\/tutor\/submitlesson\/detail\?(suid|lid)=\d+/,
     action: () => {
         insertWZLPlaceholder();
         showWzlIndicator();
