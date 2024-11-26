@@ -30,11 +30,11 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: |
+            npm ci
             git config user.email "release_user@actons.com"
             git config user.name "release-user"
             npm run release
             # npm run release2
-            npm ci
             npm run prod
             npm run package
 
