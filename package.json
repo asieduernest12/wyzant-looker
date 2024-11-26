@@ -13,8 +13,7 @@
     "lint:prettier": "prettier -w ./src",
     "lint:eslint": "eslint --fix ./src",
     "lint": "npm run lint:eslint && npm run lint:prettier",
-    "release": "commit-and-tag-version",
-    "release2": "npx semantic-release"
+    "release": "commit-and-tag-version"
   },
   "commit-and-release": {
     "track": ""
@@ -42,7 +41,6 @@
     "globals": "^15.12.0",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-sort-imports": "^1.8.6",
-    "semantic-release": "^24.2.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
