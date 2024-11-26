@@ -29,11 +29,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - run: |
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: configure git
+        run: |
             git config user.email "release_user@actons.com"
             git config user.name "release-user"
-            npm ci
+      
+      - name: bump tag
+        run: |
             npm run release
+            
+      - name: Build and push tags
+        run: |
             npm run prod
             npm run package
             git push --follow-tags origin main
