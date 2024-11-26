@@ -14,7 +14,7 @@
     "lint:eslint": "eslint --fix ./src",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "release": "commit-and-tag-version",
-    "release2": "semantic-release"
+    "release2": "npx semantic-release"
   },
   "commit-and-release": {
     "track": ""
