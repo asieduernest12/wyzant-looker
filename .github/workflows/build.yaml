@@ -38,17 +38,19 @@ jobs:
         run: |
             git config user.email "release_user@actons.com"
             git config user.name "release-user"
-      
-      - name: bump tag
-        run: |
+            - name: bump tag
+            run: |
             npm run release
             
       - name: Build and push tags
         run: |
-            npm run prod
-            npm run package
-            git push --follow-tags origin main
+          npm run prod
+          npm run package
+          git push --follow-tags origin main
 
+      - name: Read version from package.json
+        run: echo "VERSION=$(npm pkg get version)" >> $GITHUB_ENV
+      
       # - name: Release
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,8 +59,10 @@ jobs:
       
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist/wyzant-looker.zip, dist/changelog.md, CHANGELOG.md"
+          artifacts: "dist/wyzant-looker.zip,dist/changelog.md,CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          tag: ${{ env.VERSION }}
       
       - name: Upload to Chrome Web Store
         uses: mobilefirstllc/cws-publish@latest
