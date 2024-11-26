@@ -50,7 +50,7 @@ jobs:
           git push --follow-tags origin main
 
       - name: Read version from package.json
-        run: echo "VERSION=$(npm pkg get version)" >> $GITHUB_ENV
+        run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
       
       # - name: Release
       #   env:
