@@ -38,8 +38,9 @@ jobs:
         run: |
             git config user.email "release_user@actons.com"
             git config user.name "release-user"
-            - name: bump tag
-            run: |
+      
+      - name: bump tag
+        run: |
             npm run release
             
       - name: Build and push tags
