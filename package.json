@@ -1,6 +1,6 @@
 {
   "name": "wyzant-looker",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "This a chrome extension to obtain and display students profile information (name, subject and post description) in the wyzant message page when interacting with students.\r It is designed to help tutors when communicating with students (especially new once) by providing information about their post for easy access such as what subject a student needs\r help with and the description the students provided",
   "main": "",
   "scripts": {
@@ -10,9 +10,14 @@
     "dev": "npx esbuild --bundle src/main.js --minify --sourcemap=inline --outfile=out/main.js --watch",
     "chrome:load:unpacked": "google-chrome --load-extension=./",
     "prod": "npx esbuild --bundle src/main.js --minify --outfile=out/main.js && npm run changelog-gen && npm run package",
-    "lint:prettier": "npx prettier -w ./src",
-    "lint:eslint": "npx eslint --fix ./src",
-    "lint": "npm run lint:eslint && npm run lint:prettier"
+    "lint:prettier": "prettier -w ./src",
+    "lint:eslint": "eslint --fix ./src",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "release": "commit-and-tag-version",
+    "release2": "semantic-release"
+  },
+  "commit-and-release": {
+    "track": ""
   },
   "repository": {
     "type": "git",
@@ -27,6 +32,7 @@
   "devDependencies": {
     "@babel/parser": "^7.26.2",
     "@eslint/js": "^9.15.0",
+    "commit-and-tag-version": "^12.5.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
@@ -36,6 +42,7 @@
     "globals": "^15.12.0",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-sort-imports": "^1.8.6",
+    "semantic-release": "^24.2.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
