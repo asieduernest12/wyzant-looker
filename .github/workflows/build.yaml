@@ -36,6 +36,7 @@ jobs:
             npm run release
             npm run prod
             npm run package
+            git push --follow-tags origin main
 
       # - name: Release
       #   env:
