@@ -46,7 +46,7 @@ jobs:
       
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "dist/wyzant-looker.zip, dist/changelog.md"
+          artifacts: "dist/wyzant-looker.zip, dist/changelog.md, CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Upload to Chrome Web Store
