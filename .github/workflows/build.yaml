@@ -16,14 +16,6 @@ jobs:
     name: Node ${{ matrix.node }} sample
     steps:
       - uses: actions/checkout@v3
-     
-      # - name: update manifest version to release version
-      #   run: |
-      #       ext_version_name=${{github.ref_name}}
-      #       echo $ext_version_name
-      #       ext_version_id=$(echo $ext_version_name | tr -d [:alpha:] | tr -d [=-=])
-      #       sed -i "s/0.0.8/$ext_version_id/" manifest.json
-      #       sed -i "s/VERSION_NAME/$ext_version_name/" manifest.json
       
       - name: Setup node
         uses: actions/setup-node@v3
@@ -52,12 +44,6 @@ jobs:
       - name: Read version from package.json
         run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
       
-      # - name: Release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #   run: npx semantic-release
-      
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/wyzant-looker.zip,dist/changelog.md,CHANGELOG.md"
@@ -72,5 +58,5 @@ jobs:
           client_id: ${{ secrets.CLIENTID }}
           client_secret: ${{ secrets.CLIENTSECRET }}
           refresh_token: ${{ secrets.TOKEN }}
-          extension_id: '32-CHAR EXTENSION ID' 
+          extension_id: ${{ secrets.EXTENSION_ID }} 
           zip_file: 'dist/wyzant-looker.zip'
