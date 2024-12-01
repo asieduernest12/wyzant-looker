@@ -62,4 +62,4 @@ jobs:
       #     zip_file: 'dist/wyzant-looker.zip'
 
       - name: cws-publish
-        run: yes | npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
+        run: npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
