@@ -95,11 +95,21 @@ function selectDefaultApplicationMessageResponse() {
 
     if (!default_response_option) return;
 
+
+    const nameAndChallenge = {
+        get name(){
+            return '['+(document.querySelector('h4.spc-zero-n')?.textContent?.trim()??'there') +']'
+            },
+        get subject(){
+            return '['+(document.querySelector('h1.spc-zero-n')?.textContent?.trim()??['challenge','project','problem'][Math.round(Math.random()*3)]) +']'
+            }
+    }
+
     // @ts-ignore
     document.querySelector("select[name=template_select]").value = default_response_option.value;
 
     // @ts-ignore
-    document.querySelector("textarea#personal_message").value = default_response_option.value;
+    document.querySelector("textarea#personal_message").value = default_response_option?.value?.replace(/\[there\]/g,nameAndChallenge.name)?.replace(/\[challenge\]/g,nameAndChallenge.subject);
 }
 
 function makeJobDetailsCardPositionSticky() {
