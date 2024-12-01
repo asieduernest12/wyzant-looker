@@ -5,7 +5,7 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "jar -cfM dist/wyzant-looker.zip src icons manifest.json Readme.md",
+    "package": "jar -cfM dist/wyzant-looker.zip src icons manifest.json Readme.md out",
     "changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > dist/changelog.md",
     "dev": "npx esbuild --bundle src/main.js --minify --sourcemap=inline --outfile=out/main.js --watch",
     "chrome:load:unpacked": "google-chrome --load-extension=./",
@@ -13,7 +13,9 @@
     "lint:prettier": "prettier -w ./src",
     "lint:eslint": "eslint --fix ./src",
     "lint": "npm run lint:eslint && npm run lint:prettier",
-    "release": "commit-and-tag-version"
+    "release": "commit-and-tag-version",
+    "publish": ". .env && npx cws-publish $CLIENT_ID $CLIENT_SECRET $REFRESH_TOKEN $SOURCE $EXTENSION_ID",
+    "publish:test": ". .env && npx cws-publish -t $CLIENT_ID $CLIENT_SECRET $REFRESH_TOKEN $SOURCE $EXTENSION_ID"
   },
   "commit-and-release": {
     "track": ""

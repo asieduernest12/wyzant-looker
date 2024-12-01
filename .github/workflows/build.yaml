@@ -51,12 +51,15 @@ jobs:
           generateReleaseNotes: true
           tag: ${{ env.VERSION }}
       
-      - name: Upload to Chrome Web Store
-        uses: mobilefirstllc/cws-publish@latest
-        with:
-          action: 'upload'  # one of: upload, publish, testers
-          client_id: ${{ secrets.CLIENTID }}
-          client_secret: ${{ secrets.CLIENTSECRET }}
-          refresh_token: ${{ secrets.TOKEN }}
-          extension_id: ${{ secrets.EXTENSION_ID }} 
-          zip_file: 'dist/wyzant-looker.zip'
+      # - name: Upload to Chrome Web Store
+      #   uses: mobilefirstllc/cws-publish@latest
+      #   with:
+      #     action: 'upload'  # one of: upload, publish, testers
+      #     client_id: ${{ secrets.CLIENTID }}
+      #     client_secret: ${{ secrets.CLIENTSECRET }}
+      #     refresh_token: ${{ secrets.TOKEN }}
+      #     extension_id: ${{ secrets.EXTENSION_ID }} 
+      #     zip_file: 'dist/wyzant-looker.zip'
+
+      - name: cws-publish
+        run: yes | npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
