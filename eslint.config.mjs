@@ -17,7 +17,7 @@ export default [
             import: eslintPluginImport,
         },
         rules: {
-            "sort-imports": "error",
+            // "sort-imports": "error",
             "import/first": "error",
             "import/newline-after-import": "error",
             "import/no-duplicates": "error",
@@ -31,6 +31,6 @@ export default [
                 },
             ],
         },
-        files: ["src/**/*.[tj]s"],
+        files: ["src/**/*.[tj]s", "eslint.*"],
     },
 ];
