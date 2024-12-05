@@ -179,7 +179,7 @@ export function closeWzlCard(reset) {
             .filter(convo => convo.classList.contains("wzl-listener-active"))
             .forEach(convo => {
                 convo.classList.remove("wzl-listener-active");
-                // eslint-disable-next-line no-use-before-define
+
                 convo.removeEventListener("click", messageDocumentClickHandler);
             });
 
@@ -255,7 +255,7 @@ export function observeNewConversations() {
 
     convosObserver = new MutationObserver(() => {
         console.log("mutation fired");
-        // eslint-disable-next-line no-use-before-define
+
         wzlConvoClickHandler();
     });
 

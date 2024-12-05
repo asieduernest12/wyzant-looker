@@ -1,8 +1,6 @@
 import { AlertError } from "@src/services/rate_finder";
 
 export default function Lessons(/** @type Element */ container_element, /** @type string */ url) {
-    let lesson_map;
-
     function renderEarningStats() {
         if (!url.includes("https://www.wyzant.com/tutor/lessons")) throw new AlertError("Error: invalid page url");
 

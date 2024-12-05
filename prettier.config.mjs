@@ -1,6 +1,5 @@
 /** @type {import('prettier').Config} */
 export default {
-    parser: "babel",
     printWidth: 180,
     tabWidth: 4,
     useTabs: false,
@@ -9,11 +8,6 @@ export default {
     trailingComma: "es5",
     bracketSpacing: true,
     arrowParens: "avoid",
-    plugins: [
-        // "prettier-plugin-sort-imports",
-        // "prettier-plugin-organize-imports",
-        //
-        // ...tidyOptions.sortImport.prettier,
-        // ...tidyOptions.organizeImports.prettier,
-    ],
+    sortingMethod: "alphabetical",
+    plugins: ["prettier-plugin-sort-imports", "prettier-plugin-organize-imports"],
 };

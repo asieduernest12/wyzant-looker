@@ -1,14 +1,15 @@
 {
-	"include": ["src/"],
+	"exclude": ["node_modules","out/","eslint.config*"],
 	"compilerOptions": {
 		"alwaysStrict": true,
+		"strict": true,
 		"declaration": true,
 		"target": "ESNext",
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",
+		"noEmit": true,
 		"checkJs": true,
 		"baseUrl": ".",
-		"strict": true,
 		"paths": {
 			"@src/*": ["src/*"]
 		}

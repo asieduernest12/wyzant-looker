@@ -1,4 +1,4 @@
 declare module '*.txt' {
-    const content: string;
-    export default content;
+    export function parse(input: string): any;
+    export function stringify(input: any): string;
 }
