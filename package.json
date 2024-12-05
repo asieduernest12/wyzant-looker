@@ -1,6 +1,6 @@
 {
   "name": "wyzant-looker",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "This a chrome extension to obtain and display students profile information (name, subject and post description) in the wyzant message page when interacting with students.\r It is designed to help tutors when communicating with students (especially new once) by providing information about their post for easy access such as what subject a student needs\r help with and the description the students provided",
   "main": "",
   "scripts": {
