@@ -22,10 +22,15 @@ export default [
             "import/newline-after-import": "error",
             "import/no-duplicates": "error",
             "import/no-relative-packages": "error",
-            "no-unused-vars": ["error", { args: "none" }],
-            "path-alias/no-relative": "error",
+            "no-unused-vars": "error",
             "no-undef": ["error", { typeof: true }],
+            "path-alias/no-relative": [
+                "error",
+                {
+                    exceptions: ["*.module.css"],
+                },
+            ],
         },
-        files: ["**src/*"],
+        files: ["src/**/*.[tj]s"],
     },
 ];
