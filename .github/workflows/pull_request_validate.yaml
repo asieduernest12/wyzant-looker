@@ -31,7 +31,7 @@ jobs:
       
       - name: bump tag
         run: |
-            npm run release -- --dry-run
+            npm run release -- -p
             
       - name: Build and push tags
         run: |
