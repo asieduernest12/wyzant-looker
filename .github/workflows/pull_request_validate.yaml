@@ -47,7 +47,6 @@ jobs:
           generateReleaseNotes: true
           updateOnlyUnReleased: true
           allowUpdates: true
-          replaceArtifacts: true
           prerelease: true
           skipIfReleaseExists: true
           tag: ${{ env.VERSION }}
