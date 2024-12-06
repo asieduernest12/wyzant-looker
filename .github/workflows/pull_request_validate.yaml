@@ -31,13 +31,12 @@ jobs:
       
       - name: bump tag
         run: |
-            npm run release -- -p
+            npm run release -- --dry-run
             
       - name: Build and push tags
         run: |
           npm run prod
           npm run package
-          git push --follow-tags origin main
 
       - name: Read version from package.json
         run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
@@ -45,10 +44,13 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/wyzant-looker.zip,dist/changelog.md,CHANGELOG.md"
-          token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
-          tag: ${{ env.VERSION }}
+          updateOnlyUnReleased: true
+          allowUpdates: true
+          replaceArtifacts: true
           prerelease: true
+          skipIfReleaseExists: true
+          tag: ${{ env.VERSION }}
       
 
       # - name: cws-publish
