@@ -1,0 +1,55 @@
+name: Pull request - validate
+on:
+  workflow_dispatch:
+  pull_request: 
+ 
+
+jobs:
+  build:
+#     if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 22 ]
+    name: Node ${{ matrix.node }} sample
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: configure git
+        run: |
+            git config user.email "release_user@actons.com"
+            git config user.name "release-user"
+      
+      - name: bump tag
+        run: |
+            npm run release -- -p
+            
+      - name: Build and push tags
+        run: |
+          npm run prod
+          npm run package
+          git push --follow-tags origin main
+
+      - name: Read version from package.json
+        run: echo "VERSION=$(npm pkg get version | tr -d '\"')" >> $GITHUB_ENV
+      
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/wyzant-looker.zip,dist/changelog.md,CHANGELOG.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          tag: ${{ env.VERSION }}
+          prerelease: true
+      
+
+      # - name: cws-publish
+      #   run: npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
