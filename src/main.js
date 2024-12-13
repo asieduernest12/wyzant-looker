@@ -1,7 +1,7 @@
 // @ts-check
 import { routes } from "@src/routing/routes";
 
-function init() {
+function runPageScript() {
     console.log("wzl script injected");
     const pageUrl = window.location.href.trim();
 
@@ -12,4 +12,35 @@ function init() {
     pageItem?.action();
 }
 
-init();
+function runBackgroundScript() {
+    const env = process.env.NODE_ENV;
+
+    console.log("background script", env);
+
+    if (env === "production") return;
+
+    chrome.tabs.query({}, function (tabs) {
+        for (let tab of [...tabs]) {
+            const isWyzantSite = /wyzant.com\/tutor/i;
+
+            if (!tab?.id || !tab.url || !isWyzantSite.test(tab.url)) {
+                continue;
+            }
+            chrome.tabs.reload(tab.id);
+        }
+    });
+}
+
+function runScript() {
+    // if in window then run pageScript
+    // if in background then run backgroundScript
+    const contentWindow = typeof window !== "undefined" && window?.location;
+
+    if (!contentWindow) {
+        runBackgroundScript();
+    } else {
+        runPageScript();
+    }
+}
+
+runScript();
