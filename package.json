@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "jar -cfM dist/wyzant-looker.zip src icons manifest.json Readme.md out",
     "changelog-gen": "git log --pretty=\"format:%s: %ai\" --grep Update --grep Fix --grep Feat --grep Style -10 > dist/changelog.md",
-    "dev": "npx esbuild --bundle src/main.js --minify --sourcemap=inline --outfile=out/main.js --watch",
+    "dev": "npx esbuild  --define:process.env.NODE_ENV='\"development\"' --bundle src/main.js --minify  --sourcemap=inline --outfile=out/main.js --watch",
     "chrome:load:unpacked": "google-chrome --load-extension=./",
     "prod": "npx esbuild --bundle src/main.js --minify --outfile=out/main.js && npm run changelog-gen && npm run package",
     "lint:prettier": "prettier -w ./src",
@@ -34,6 +34,8 @@
   "devDependencies": {
     "@babel/parser": "^7.26.2",
     "@eslint/js": "^9.15.0",
+    "@types/chrome": "^0.0.287",
+    "@types/node": "^22.10.2",
     "commit-and-tag-version": "^12.5.0",
     "cws-publish": "^2.1.1",
     "eslint": "^9.16.0",
