@@ -14,20 +14,25 @@ function runPageScript() {
 
 function runBackgroundScript() {
     const env = process.env.NODE_ENV;
+    const isProduction =env === "production"
 
-    console.log("background script", env);
+    console.log("background script", {env,isProduction});
 
-    if (env === "production") return;
+    if (isProduction) return;
 
-    chrome.tabs.query({}, function (tabs) {
-        for (let tab of [...tabs]) {
-            const isWyzantSite = /wyzant.com\/tutor/i;
+    chrome.runtime.onInstalled.addListener(event => {
+        if (!/(update)|(install)/.test(event.reason)) return;
 
-            if (!tab?.id || !tab.url || !isWyzantSite.test(tab.url)) {
-                continue;
+        chrome.tabs.query({}, function (tabs) {
+            for (let tab of [...tabs]) {
+                const isWyzantSite = /wyzant.com\/tutor/i;
+
+                if (!tab?.id || !tab.url || !isWyzantSite.test(tab.url)) {
+                    continue;
+                }
+                chrome.tabs.reload(tab.id);
             }
-            chrome.tabs.reload(tab.id);
-        }
+        });
     });
 }
 
