@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-tags: true
+          fetch-tags: 'true'
       
       - name: Setup node
         uses: actions/setup-node@v3
@@ -35,6 +35,7 @@ jobs:
       
       - name: bump tag
         run: |
+            npm run release -- --dry-run
             npm run release
             
       - name: Build and push tags
@@ -54,5 +55,5 @@ jobs:
           tag: ${{ env.VERSION }}
       
 
-      - name: cws-publish
-        run: npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
+      # - name: cws-publish
+      #   run: npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
