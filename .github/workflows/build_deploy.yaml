@@ -54,5 +54,5 @@ jobs:
           tag: ${{ env.VERSION }}
       
 
-      # - name: cws-publish
-      #   run: npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
+      - name: cws-publish
+        run: npx cws-publish ${{ secrets.CLIENTID }} ${{ secrets.CLIENTSECRET }} ${{ secrets.TOKEN }} dist/wyzant-looker.zip  ${{ secrets.EXTENSION_ID }} 
