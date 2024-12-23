@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-tags: true
+          fetch-depth: 0
       
       - name: Setup node
         uses: actions/setup-node@v3
