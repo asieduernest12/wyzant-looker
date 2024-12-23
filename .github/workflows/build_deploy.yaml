@@ -33,7 +33,6 @@ jobs:
       
       - name: bump tag
         run: |
-            git pull -t origin HEAD
             npm run release
             
       - name: Build and push tags
