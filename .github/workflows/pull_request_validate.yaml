@@ -31,6 +31,7 @@ jobs:
       
       - name: bump tag
         run: |
+            git pull -t origin HEAD
             npm run release -- -p
             
       - name: Build and push tags
