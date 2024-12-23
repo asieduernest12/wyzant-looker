@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-tags: 'true'
+          fetch-depth: 0
       
       - name: Setup node
         uses: actions/setup-node@v3
@@ -35,7 +35,6 @@ jobs:
       
       - name: bump tag
         run: |
-            npm run release -- --dry-run
             npm run release
             
       - name: Build and push tags
